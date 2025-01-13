@@ -1,2 +1,0 @@
-ING_INFORMATICA = "565_PlanInformatica2023"
-ING_ELECTRONICA = "566_PlanElectronica2023"

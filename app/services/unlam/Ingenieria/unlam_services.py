@@ -1,11 +1,11 @@
 import os
-from flask_restful import Resource
+from flask_restx import Resource
 from app.utils import BASE_DIR_CARRERA
 import pdfplumber
 
-class UnlamIngenieria(Resource):
+class UNLAMIngenieria(Resource):
     def get(self,unlam_carrera):
-        pdf_path = BASE_DIR_CARRERA + '\\carrera\\' + unlam_carrera + '.pdf'
+        pdf_path = BASE_DIR_CARRERA + '\\carrera\\unlam\\' + unlam_carrera + '.pdf'
         print(pdf_path)
         pdf = pdfplumber.open(pdf_path)
         table = []
@@ -34,4 +34,4 @@ class UnlamIngenieria(Resource):
                     if len(filter_data) > 1:
                         data.append(filter_data)
 
-        return data, 200
+        return  data, 200
