@@ -1,33 +1,10 @@
 from flask_restx import Resource
 from app.utils import BASE_DIR_CARRERA, Open_PDF, Response_NotFound
-
-UNLAM_FILTER_ING_INFORMATICA = ('', None,
-                        'PRIMER CUATRIMESTRE',
-                        'SEGUNDO CUATRIMESTRE',
-                        'semanales',
-                        'Título Intermedio: Técnico Universitario en Desarrollo de Software',
-                        'Para su obtención se requiere tener aprobadas todas las asignaturas de los tres primeros años\ninclusive, niveles I y II de Inglés Transversal',
-                        'CONOCIMIENTOS COMUNES REQUERIDOS POR HCS DE LA UNLaM',
-                        'Código',
-                        'Asignatura',
-                        'Correlatividad',
-                        'Horas',
-                        'Horas\nsemanales')
-
-UNLAM_FILTER_ING_CIVIL = ('', None,'Código','Asignatura','Correlatividad','Horas','Régimen','Cuatrimestral')
-
-UNLAM_FILTER_ING_ARQUITECTURA = ('',None,'Código','Asignatura','Correlatividad','Horas semanales')
-
-UNLAM_FILTER_ING_MECANICA = ('',None,'Código','Asignatura','Correlatividad','Horas semanales','Horas cuatrimestrales',
-                            'Total de horas anuales de transversales','384')
-
-UNLAM_FILTER_ING_ELETRONICA = ('',None)
-
-UNLAM_FILTER_ING_INDUSTRIAL = ('',None)
+from app.utils.constants import UNLAM_FILTER_ING_INFORMATICA, UNLAM_FILTER_ING_CIVIL, UNLAM_FILTER_ING_ARQUITECTURA, UNLAM_FILTER_ING_MECANICA,UNLAM_FILTER_ING_ELETRONICA,UNLAM_FILTER_ING_INDUSTRIAL
 
 class UNLAMIngenieria(Resource):
     def get(self,unlam_carrera):
-        pdf_path = BASE_DIR_CARRERA + '\\carrera\\unlam\\'
+        pdf_path = BASE_DIR_CARRERA + '\\carrera\\unlam\\ingenieria\\'
         if unlam_carrera == 'informatica':
             pdf_path = pdf_path + "565_PlanInformatica2023.pdf"
             data = Open_PDF(pdf_path, UNLAM_FILTER_ING_INFORMATICA)
