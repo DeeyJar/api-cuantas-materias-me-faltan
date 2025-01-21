@@ -9,26 +9,44 @@ class UNLAMSalud(Resource):
         if unlam_carrera == 'enfermeria':
             pdf_path = pdf_path + "15_Enfermeria.pdf"
             data = Open_PDF(pdf_path)
+        if unlam_carrera == 'medicina':
+            pdf_path = pdf_path + "14_Medicina2023.pdf"
+            data = Open_PDF(pdf_path)
+        if unlam_carrera == 'nutricion':
+            pdf_path = pdf_path + "16_Nutricion.pdf"
+            data = Open_PDF(pdf_path)
+        if unlam_carrera == 'kinesiologia':
+            pdf_path = pdf_path + "17_KinesiologiayFisiatria.pdf"
+            data = Open_PDF(pdf_path)
+        if unlam_carrera == 'anatomia':
+            pdf_path = pdf_path + "33_AnatomiaPatologica.pdf"
+            data = Open_PDF(pdf_path)
         
         return data
-    
 
 def Open_PDF(pdf_path):
     pdf = pdfplumber.open(pdf_path)
     data = []
-    for page in pdf.pages:
-        text = page.extract_text()
-        # matches = re.findall(r"(\d{4})\s*(.*?)\s*(?:\((.*?)\))?", text)
-        # for match in matches:
-        patron = r"(\d{4})\s*(.*?)\s*(?:\((.*?)\))?"
-        for match in re.finditer(patron, text):
-            codigo, asignatura, correlativas = match.groups()
-            # codigo = match[0].strip()
-            # asignatura = match[1].strip()
-            # correlativas = match[2].strip()
-            data.append({
-                "Código": codigo.strip(),
-                "Asignatura": asignatura.strip(),
-                "Correlativas": correlativas.strip() if correlativas else None
-            })
+    for pages in pdf.pages:
+        text = pages.extract_text()
+        lines = text.splitlines()
+        current_record = None
+        for line in lines:
+            match = re.match(r"(\d{4}|\d{5})\s+([A-ZÁÉÍÓÚÑ ]+)\s+([\d\s\-]*)", line)
+            if match:
+                if current_record:
+                    data.append(current_record)
+
+                current_record = {
+                    "Código": match.group(1),
+                    "Asignatura": match.group(2),
+                    "Correlativas": match.group(3).strip(),
+                }
+            else:
+                if current_record:
+                    if re.match(r"^[\d\s\-]+$", line.strip()):
+                        current_record["Correlativas"] += f" - {line.strip()}"
+        if current_record:
+            data.append(current_record)
+
     return data
